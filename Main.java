@@ -8,6 +8,7 @@ public class Main {
 
         Scanner sc = new Scanner(System.in);
         Bank bank = new Bank();
+        bank.loadAccounts();
 
         while (true) {
             System.out.println("===Bank  Managemet System===");
@@ -50,13 +51,14 @@ public class Main {
                         System.out.print("Enter Accont Type: ");
                         accType = sc.nextLine();
 
-                        System.out.print("Enter Balance: ");
+                        System.out.print("Enter Balance: ₹");
                         balance = sc.nextDouble();
                         sc.nextLine();
 
                         Account account = new Account(accountNo, accountName, accType, balance);
 
                         bank.createAccount(account);
+                        bank.saveAccounts();
 
                     } catch (InputMismatchException e) {
                         System.out.println("Invalid input! Please check your input.");
@@ -99,7 +101,7 @@ public class Main {
                         System.out.print("Enter Account Number: ");
                         int withAcc = sc.nextInt();
 
-                        System.out.print("Enter Withdrawn amount: ");
+                        System.out.print("Enter Withdrawn amount: ₹");
                         double amountWithdraw = sc.nextDouble();
                         bank.withdrawMoney(withAcc, amountWithdraw);
 
@@ -142,7 +144,7 @@ public class Main {
                         System.out.print("Enter receiver account number: ");
                         int receiverAcc = sc.nextInt();
 
-                        System.out.print("Amount: ");
+                        System.out.print("Amount: ₹");
                         double amount = sc.nextDouble();
 
                         bank.transferMoney(senderAcc, receiverAcc, amount);

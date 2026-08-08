@@ -1,4 +1,8 @@
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 
 public class Bank {
@@ -160,5 +164,55 @@ public class Bank {
         receiver.setBalance(receiver.getBalance() + amount);
 
         System.out.println("Transfer Successful!");
+    }
+
+    public void saveAccounts() {
+        try {
+            FileWriter writer = new FileWriter("accounts.txt");
+
+            for (Account account : accounts) {
+                writer.write(
+                        account.getAccountNo() + ","
+                        + account.getAccountName() + ","
+                        + account.getAccountType() + ","
+                        + account.getBalance() + "\n"
+                );
+            }
+            writer.close();
+            System.out.println("Account saved successfully!");
+
+        } catch (IOException e) {
+            System.out.println("Error while saving accounts!");
+        }
+    }
+
+    public void loadAccounts() {
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader("accounts.txt"));
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+                String[] data = line.split(",");
+                int accountNo = Integer.parseInt(data[0]);
+                String accountName = data[1];
+                String accountType = data[2];
+                double balance = Double.parseDouble(data[3]);
+
+                Account account = new Account(
+                        accountNo,
+                        accountName,
+                        accountType,
+                        balance
+                );
+                accounts.add(account);
+
+            }
+            reader.close();
+            System.out.println("Accounts loaded successfully!");
+        } catch (IOException e) {
+            System.out.println("No previous account data found!");
+
+        }
+
     }
 }
