@@ -19,6 +19,7 @@ public class Bank {
             }
         }
         accounts.add(account);
+        saveAccounts();
 
         System.out.println("Account created successfully!");
     }
@@ -49,6 +50,7 @@ public class Bank {
             if (account.getAccountNo() == num) {
                 double newBalance = account.getBalance() + amount;
                 account.setBalance(newBalance);
+                saveAccounts();
                 System.out.println("Money deposited successfully!");
                 found = true;
                 break;
@@ -73,6 +75,7 @@ public class Bank {
 
                     double newBalance = account.getBalance() - amountWithdraw;
                     account.setBalance(newBalance);
+                    saveAccounts();
 
                     System.out.println("Money withdrawn successfully!");
 
@@ -104,6 +107,7 @@ public class Bank {
 
         if (toRemove != null) {
             accounts.remove(toRemove);
+            saveAccounts();
             System.out.println("Account deleted successfully!");
         } else {
             System.out.println("Account Not Found!");
@@ -162,6 +166,8 @@ public class Bank {
         // Transfer
         sender.setBalance(sender.getBalance() - amount);
         receiver.setBalance(receiver.getBalance() + amount);
+
+        saveAccounts();
 
         System.out.println("Transfer Successful!");
     }
