@@ -52,7 +52,7 @@ public class Bank {
                 double newBalance = account.getBalance() + amount;
                 account.setBalance(newBalance);
                 transactions.add(
-                        new Transaction("Deposit", amount, num)
+                        new Transaction("Deposit", amount, num, -1)
                 );
                 saveAccounts();
                 System.out.println("Money deposited successfully!");
@@ -80,7 +80,7 @@ public class Bank {
                     double newBalance = account.getBalance() - amountWithdraw;
                     account.setBalance(newBalance);
                     transactions.add(
-                            new Transaction("Withdraw", amountWithdraw, withAcc)
+                            new Transaction("Withdraw", amountWithdraw, withAcc, -1)
                     );
                     saveAccounts();
 
@@ -177,7 +177,8 @@ public class Bank {
                 new Transaction(
                         "Transfer",
                         amount,
-                        senderAcc
+                        senderAcc,
+                        receiverAcc
                 )
         );
         saveAccounts();

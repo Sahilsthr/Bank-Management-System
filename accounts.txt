@@ -1,2 +1,2 @@
-101,sahil suthar,saving,1800.0
-102,mithun,current,30200.0
+101,sahil suthar,saving,1780.0
+102,mithun,current,30220.0
