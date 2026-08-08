@@ -20,8 +20,9 @@ public class Main {
             System.out.println("6. Delete Account");
             System.out.println("7. Check Balance");
             System.out.println("8. Transfer Money");
+            System.out.println("9. View Transaction History");
 
-            System.out.println("9. Exit");
+            System.out.println("10. Exit");
             int choice = 0;
             try {
                 System.out.print("Enter Choice: ");
@@ -155,6 +156,9 @@ public class Main {
                     }
                     break;
                 case 9:
+                    bank.viewTransactions();
+                    break;
+                case 10:
                     System.out.println("===Thanks for using Bank Management System===");
                     sc.close();
                     return;

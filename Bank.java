@@ -8,6 +8,7 @@ import java.util.*;
 public class Bank {
 
     ArrayList<Account> accounts = new ArrayList<>();
+    ArrayList<Transaction> transactions = new ArrayList<>();
 
     public void createAccount(Account account) {
 
@@ -50,6 +51,9 @@ public class Bank {
             if (account.getAccountNo() == num) {
                 double newBalance = account.getBalance() + amount;
                 account.setBalance(newBalance);
+                transactions.add(
+                        new Transaction("Deposit", amount, num)
+                );
                 saveAccounts();
                 System.out.println("Money deposited successfully!");
                 found = true;
@@ -75,6 +79,9 @@ public class Bank {
 
                     double newBalance = account.getBalance() - amountWithdraw;
                     account.setBalance(newBalance);
+                    transactions.add(
+                            new Transaction("Withdraw", amountWithdraw, withAcc)
+                    );
                     saveAccounts();
 
                     System.out.println("Money withdrawn successfully!");
@@ -166,7 +173,13 @@ public class Bank {
         // Transfer
         sender.setBalance(sender.getBalance() - amount);
         receiver.setBalance(receiver.getBalance() + amount);
-
+        transactions.add(
+                new Transaction(
+                        "Transfer",
+                        amount,
+                        senderAcc
+                )
+        );
         saveAccounts();
 
         System.out.println("Transfer Successful!");
@@ -221,4 +234,20 @@ public class Bank {
         }
 
     }
+
+    public void viewTransactions() {
+
+        if (transactions.isEmpty()) {
+            System.out.println("No transaction found!");
+            return;
+
+        }
+
+        System.out.println("===Transactio History===");
+
+        for (Transaction transaction : transactions) {
+            System.out.println(transaction);
+        }
+    }
+
 }
