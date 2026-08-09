@@ -50,8 +50,16 @@ public class Main {
 
                         System.out.print("Enter Accont Holder Name: ");
                         accountName = sc.nextLine();
+                        if (accountName.trim().isEmpty()) {
+                            System.out.println("Account holder name cannot be empty!");
+                            break;
+                        }
                         System.out.print("Enter Accont Type: ");
                         accType = sc.nextLine();
+                        if (accType.trim().isEmpty()) {
+                            System.out.println("Account type cannot be empty!");
+                            break;
+                        }
 
                         System.out.print("Enter Balance: ₹");
                         balance = sc.nextDouble();

@@ -11,6 +11,10 @@ public class Bank {
     ArrayList<Transaction> transactions = new ArrayList<>();
 
     public void createAccount(Account account) {
+        if (account.getBalance() < 0) {
+            System.out.println("Initial balance cannot be negative!");
+            return;
+        }
 
         for (Account acc : accounts) {
 
@@ -46,6 +50,11 @@ public class Bank {
     }
 
     public void depositMoney(int num, double amount) {
+
+        if (amount <= 0) {
+            System.out.println("Deposit amount must be greater than 0!");
+            return;
+        }
         boolean found = false;
         for (Account account : accounts) {
             if (account.getAccountNo() == num) {
@@ -67,6 +76,10 @@ public class Bank {
     }
 
     public void withdrawMoney(int withAcc, double amountWithdraw) {
+        if (amountWithdraw <= 0) {
+            System.out.println("Deposit amount must be greater than 0!");
+            return;
+        }
 
         boolean found = false;
 
@@ -138,6 +151,10 @@ public class Bank {
     }
 
     public void transferMoney(int senderAcc, int receiverAcc, double amount) {
+        if (amount <= 0) {
+            System.out.println("Transfer amount must be greater than 0!");
+            return;
+        }
 
         Account sender = null;
         Account receiver = null;
