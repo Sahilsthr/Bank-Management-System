@@ -9,6 +9,7 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         Bank bank = new Bank();
         bank.loadAccounts();
+        bank.loadTransaction();
 
         while (true) {
             System.out.println("===Bank  Managemet System===");
@@ -59,7 +60,6 @@ public class Main {
                         Account account = new Account(accountNo, accountName, accType, balance);
 
                         bank.createAccount(account);
-                        bank.saveAccounts();
 
                     } catch (InputMismatchException e) {
                         System.out.println("Invalid input! Please check your input.");

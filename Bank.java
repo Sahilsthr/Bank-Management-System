@@ -55,6 +55,7 @@ public class Bank {
                         new Transaction("Deposit", amount, num, -1)
                 );
                 saveAccounts();
+                saveTransaction();
                 System.out.println("Money deposited successfully!");
                 found = true;
                 break;
@@ -83,6 +84,7 @@ public class Bank {
                             new Transaction("Withdraw", amountWithdraw, withAcc, -1)
                     );
                     saveAccounts();
+                    saveTransaction();
 
                     System.out.println("Money withdrawn successfully!");
 
@@ -182,7 +184,7 @@ public class Bank {
                 )
         );
         saveAccounts();
-
+        saveTransaction();
         System.out.println("Transfer Successful!");
     }
 
@@ -249,6 +251,61 @@ public class Bank {
         for (Transaction transaction : transactions) {
             System.out.println(transaction);
         }
+    }
+
+    public void saveTransaction() {
+
+        try {
+            FileWriter writer = new FileWriter("transactions.txt");
+
+            for (Transaction transaction : transactions) {
+                writer.write(transaction.getType() + ","
+                        + transaction.getAmount() + ","
+                        + transaction.getSender() + ","
+                        + transaction.getReceiver() + ","
+                        + transaction.getDateTime() + "\n"
+                );
+
+            }
+            writer.close();
+            System.out.println("Transaction Saved successfully!!");
+
+        } catch (IOException e) {
+            System.out.println("Error while saving transactions");
+
+        }
+    }
+
+    public void loadTransaction() {
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader("transactions.txt"));
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+                String[] data = line.split(",");
+
+                String type = data[0];
+                double amount = Double.parseDouble(data[1]);
+                int senderAccount = Integer.parseInt(data[2]);
+                int receiverAccount = Integer.parseInt(data[3]);
+                String dateTime = data[4];
+
+                Transaction transaction = new Transaction(
+                        type,
+                        amount,
+                        senderAccount,
+                        receiverAccount,
+                        dateTime
+                );
+                transactions.add(transaction);
+            }
+            reader.close();
+            System.out.println("Transaction loaded successfully!!");
+
+        } catch (IOException e) {
+            System.out.println("Error while loading transaction!");
+        }
+
     }
 
 }
