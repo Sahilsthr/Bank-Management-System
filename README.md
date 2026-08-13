@@ -1,174 +1,143 @@
 # 🏦 Bank Management System
 
-A console-based **Bank Management System** built using **Core Java**. The application allows users to create and manage bank accounts, perform transactions, transfer money, and store account data using file handling.
+A console-based **Bank Management System** built with **Java, JDBC, and MySQL**. It supports core banking operations — account creation, deposits, withdrawals, transfers, and transaction history — with all data persisted in a MySQL database
 
 ---
 
-## 🚀 Features
+## 📋 Table of Contents
 
-- 🏦 Create Account
-- 👀 View All Accounts
-- 🔍 Search Account
-- 💰 Deposit Money
-- 💸 Withdraw Money
-- 🔄 Transfer Money
-- 🗑️ Delete Account
-- 💳 Check Account Balance
-- ⚠️ Exception Handling
-- 🔢 Duplicate Account Number Validation
-- 💾 File-Based Data Persistence
-- 🔄 Automatically Save Account Changes
-- 📂 Load Account Data When Program Starts
-- 💰 Insufficient Balance Validation
-- ✅ Transaction Amount Validation
+- [Features](#-features)
+- [Technologies Used](#-technologies-used)
+- [Project Structure](#-project-structure)
+- [Database Setup](#-database-setup)
+- [Configuration](#-configuration)
+- [How to Run](#-how-to-run)
+- [Application Menu](#-application-menu)
+- [How the Transfer System Works](#-how-the-transfer-system-works)
+- [What I Practiced](#-what-i-practiced)
+- [Future Improvements](#-future-improvements)
+- [Author](#-author)
 
 ---
 
-## 🛠️ Technologies Used
+## ✨ Features
 
-- Java
-- Object-Oriented Programming (OOP)
-- ArrayList
-- File Handling
-- Exception Handling
-- Git
-- GitHub
-
----
-
-## 📚 Concepts Used
-
-- Classes and Objects
-- Constructors
-- Encapsulation
-- Getters and Setters
-- ArrayList
-- Methods
-- Loops
-- Conditional Statements
-- Exception Handling
-- File Reading
-- File Writing
-- Data Persistence
-- CRUD Operations
+| Feature | Description |
+|---|---|
+| Create Account | Add a new account with duplicate account number validation |
+| View All Accounts | List every account stored in the database |
+| Search Account | Look up a specific account by account number |
+| Deposit Money | Add funds to an existing account |
+| Withdraw Money | Remove funds, with balance validation |
+| Transfer Money | Move funds between two accounts safely |
+| Delete Account | Remove an account from the system |
+| Check Balance | View the current balance of an account |
+| Transaction History | View a full log of past transactions |
+| Input Validation | Prevents invalid or malformed data entry |
+| Transaction Handling | Commit/rollback ensures data consistency |
 
 ---
 
-## 📂 Project Structure
+## 🛠 Technologies Used
 
-```text
+- **Java** – core application logic
+- **JDBC** – database connectivity
+- **MySQL** – data storage
+- **Git & GitHub** – version control
+
+---
+
+## 📁 Project Structure
+
+```
 Bank-Management-System/
 │
-├── Main.java
-├── Bank.java
 ├── Account.java
-├── README.md
-└── .gitignore
+├── AccountDAO.java
+├── Bank.java
+├── DatabaseConnection.java
+├── Main.java
+├── Transaction.java
+├── TransactionDAO.java
+├── lib/
+│   └── mysql-connector-j-26.7.0.jar
+├── .gitignore
+└── README.md
 ```
 
 ---
 
-## 💾 Data Persistence
+## 🗄 Database Setup
 
-The application uses **File Handling** to store account information.
+**1. Create the database:**
 
-Account data is saved in a file and loaded automatically when the application starts.
-
-### Example stored data:
-
-```text
-101,Sahil,Savings,20000.0
-102,Rahul,Current,15000.0
+```sql
+CREATE DATABASE bms;
 ```
 
-This allows account data to remain available even after the program is closed.
+**2. Create the `accounts` table:**
+
+```sql
+CREATE TABLE accounts (
+    account_no INT PRIMARY KEY,
+    account_name VARCHAR(100),
+    account_type VARCHAR(50),
+    balance DOUBLE
+);
+```
+
+**3. Create the `transactions` table:**
+
+```sql
+CREATE TABLE transactions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    type VARCHAR(50),
+    amount DOUBLE,
+    sender_account INT,
+    receiver_account INT,
+    date_time VARCHAR(50)
+);
+```
 
 ---
 
-## ⚙️ How It Works
+## ⚙ Configuration
 
-### Create Account
+Open `DatabaseConnection.java` and update the MySQL credentials to match your local setup:
 
-The user provides:
+```java
+private static final String URL = "jdbc:mysql://localhost:3306/bms";
+private static final String USER = "root";
+private static final String PASSWORD = "your_password";
+```
 
-- Account Number
-- Account Holder Name
-- Account Type
-- Initial Balance
-
-The system checks whether the account number already exists before creating the account.
-
-### Deposit Money
-
-The specified amount is added to the account balance and the updated data is automatically saved.
-
-### Withdraw Money
-
-The system checks whether the account has sufficient balance before withdrawing the requested amount.
-
-### Transfer Money
-
-Money can be transferred between two different accounts.
-
-The system checks:
-
-- Sender account exists
-- Receiver account exists
-- Transfer amount is valid
-- Sender has sufficient balance
-- Sender and receiver are different accounts
-
-### Delete Account
-
-The selected account is removed from the system and the updated account data is saved.
+> ⚠️ **Never commit your actual MySQL password to GitHub.** Consider using environment variables or a config file excluded via `.gitignore`.
 
 ---
 
-## ⚠️ Exception Handling
+## 🚀 How to Run
 
-The application handles invalid user input using Java's `InputMismatchException`.
+**Prerequisites:** Java and MySQL installed, with the MySQL server running. The MySQL Connector/J `.jar` is already included in `lib/`.
 
-Examples:
-
-- Entering text instead of a number
-- Invalid account number input
-- Invalid transaction amount
-
-This prevents the program from crashing due to incorrect input.
-
----
-
-## ▶️ How to Run
-
-### 1. Clone the repository
+**1. Compile:**
 
 ```bash
-git clone https://github.com/Sahilsthr/Bank-Management-System.git
+javac -cp "lib\mysql-connector-j-26.7.0.jar" *.java
 ```
 
-### 2. Navigate to the project directory
+**2. Run:**
 
 ```bash
-cd Bank-Management-System
+java -cp ".;lib\mysql-connector-j-26.7.0.jar" Main
 ```
 
-### 3. Compile the Java files
-
-```bash
-javac Main.java Bank.java Account.java
-```
-
-### 4. Run the application
-
-```bash
-java Main
-```
+> On macOS/Linux, replace `;` with `:` in the classpath (e.g. `java -cp ".:lib/mysql-connector-j-26.7.0.jar" Main`).
 
 ---
 
-## 🖥️ Menu
+## 📟 Application Menu
 
-```text
+```
 === Bank Management System ===
 
 1. Create Account
@@ -179,31 +148,52 @@ java Main
 6. Delete Account
 7. Check Balance
 8. Transfer Money
-9. Exit
+9. View Transaction History
+10. Exit
 ```
+
+---
+
+## 🔄 How the Transfer System Works
+
+The money transfer feature uses a **database transaction** to guarantee consistency:
+
+1. Verify the sender account exists.
+2. Verify the receiver account exists.
+3. Check that the sender has sufficient balance.
+4. Deduct the amount from the sender's account.
+5. Add the amount to the receiver's account.
+6. **Commit** the transaction if both updates succeed.
+7. **Rollback** the transaction if anything fails.
+
+This prevents partial transfers where money is deducted from one account without being credited to the other.
+
+---
+
+## 📚 What I Practiced
+
+- Java OOP — classes, objects, constructors, encapsulation
+- Exception handling
+- JDBC — `PreparedStatement`, `ResultSet`
+- MySQL CRUD operations
+- Database transactions (commit & rollback)
+- Git and GitHub workflow
 
 ---
 
 ## 🔮 Future Improvements
 
-- 🗄️ MySQL Database Integration using JDBC
-- 📜 Transaction History
-- 🔐 User Authentication
-- 👤 Customer Login
-- 🏧 ATM-like Interface
-- 📊 Account Statements
-- 🌐 REST API using Spring Boot
-- 🔑 JWT Authentication
-- 🗃️ Hibernate/JPA Integration
+- [ ] User login system
+- [ ] PIN protection
+- [ ] Account statements
+- [ ] Improved transaction reports
+- [ ] Admin functionality
+- [ ] GUI version
+- [ ] Enhanced security (hashing, encryption)
 
 ---
 
-## 👨‍💻 Author
+## 👤 Author
 
 **Sahil Suthar**
-
-GitHub: https://github.com/Sahilsthr
-
----
-
-⭐ If you found this project useful, consider giving the repository a star!
+B.Tech Student — Computer Science Engineering
