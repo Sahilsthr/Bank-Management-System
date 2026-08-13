@@ -9,6 +9,8 @@ public class Bank {
 
     ArrayList<Account> accounts = new ArrayList<>();
     ArrayList<Transaction> transactions = new ArrayList<>();
+    AccountDAO accountDAO = new AccountDAO();
+    TransactionDAO transactionDAO = new TransactionDAO();
 
     public void createAccount(Account account) {
         if (account.getBalance() < 0) {
@@ -16,170 +18,131 @@ public class Bank {
             return;
         }
 
-        for (Account acc : accounts) {
-
-            if (acc.getAccountNo() == account.getAccountNo()) {
-                System.out.println("Account Number is already occupied!!");
-                return;
-            }
-        }
-        accounts.add(account);
-        saveAccounts();
-
+        // for (Account acc : accounts) {
+        //     if (acc.getAccountNo() == account.getAccountNo()) {
+        //         System.out.println("Account Number is already occupied!!");
+        //         return;
+        //     }
+        // }
+        // accounts.add(account);
+        // saveAccounts();
+        accountDAO.createAccount(account);
         System.out.println("Account created successfully!");
     }
 
     public void viewAccount() {
-        for (Account account : accounts) {
+        ArrayList<Account> dbAccounts = accountDAO.getAllAccounts();
+
+        for (Account account : dbAccounts) {
             System.out.println(account);
         }
+
     }
 
     public void searchAccount(int accountNo) {
-        boolean found = false;
-        for (Account account : accounts) {
-            if (account.getAccountNo() == accountNo) {
-                System.out.println(account);
-                found = true;
-                break;
-            }
+        Account account = accountDAO.searchAccount(accountNo);
+
+        if (account != null) {
+            System.out.println(account);
+
+        } else {
+            System.out.println("account not found!");
         }
-        if (!found) {
-            System.out.println("Account Not found!");
-        }
+
     }
 
-    public void depositMoney(int num, double amount) {
-
+    public void depositMoney(int accountNo, double amount) {
         if (amount <= 0) {
             System.out.println("Deposit amount must be greater than 0!");
             return;
         }
-        boolean found = false;
-        for (Account account : accounts) {
-            if (account.getAccountNo() == num) {
-                double newBalance = account.getBalance() + amount;
-                account.setBalance(newBalance);
-                transactions.add(
-                        new Transaction("Deposit", amount, num, -1)
-                );
-                saveAccounts();
-                saveTransaction();
-                System.out.println("Money deposited successfully!");
-                found = true;
-                break;
-            }
+        Account account = accountDAO.searchAccount(accountNo);
+
+        if (account == null) {
+            System.out.println("Account not found!");
+            return;
+
         }
-        if (!found) {
-            System.out.println("Account Not found!");
+        double newBalance = account.getBalance() + amount;
+
+        boolean updated = accountDAO.updateBalance(accountNo, newBalance);
+
+        if (updated) {
+            Transaction transaction = new Transaction("Deposit", amount, accountNo, -1);
+            transactionDAO.saveTransaction(transaction);
+            System.out.println("Money deposited successfully!");
+        } else {
+            System.out.println("Failed to desposit money");
         }
+
     }
 
-    public void withdrawMoney(int withAcc, double amountWithdraw) {
+    public void withdrawMoney(int accountNo, double amountWithdraw) {
         if (amountWithdraw <= 0) {
             System.out.println("Deposit amount must be greater than 0!");
             return;
         }
 
-        boolean found = false;
+        Account account = accountDAO.searchAccount(accountNo);
 
-        for (Account account : accounts) {
-
-            if (account.getAccountNo() == withAcc) {
-
-                found = true;
-
-                if (account.getBalance() >= amountWithdraw) {
-
-                    double newBalance = account.getBalance() - amountWithdraw;
-                    account.setBalance(newBalance);
-                    transactions.add(
-                            new Transaction("Withdraw", amountWithdraw, withAcc, -1)
-                    );
-                    saveAccounts();
-                    saveTransaction();
-
-                    System.out.println("Money withdrawn successfully!");
-
-                } else {
-
-                    System.out.println("Insufficient Balance!");
-
-                }
-
-                break;
-            }
+        if (account == null) {
+            System.out.println("Account not found!");
+            return;
         }
 
-        if (!found) {
-            System.out.println("Account Not Found!");
+        double newBalance = account.getBalance() - amountWithdraw;
+        boolean updated = accountDAO.updateBalance(accountNo, newBalance);
+
+        if (updated) {
+            Transaction transaction = new Transaction("Withdraw", amountWithdraw, accountNo, -1);
+            transactionDAO.saveTransaction(transaction);
+            System.out.println("Money withdrawn successfully!");
+
+        } else {
+            System.out.println("Failed to withdraw money!");
         }
+
     }
 
     public void deleteAccount(int delAcc) {
 
-        Account toRemove = null;
+        boolean deleted = accountDAO.deleteAccount(delAcc);
 
-        for (Account account : accounts) {
-            if (account.getAccountNo() == delAcc) {
-                toRemove = account;
-                break;
-            }
-        }
+        if (deleted) {
 
-        if (toRemove != null) {
-            accounts.remove(toRemove);
-            saveAccounts();
             System.out.println("Account deleted successfully!");
         } else {
             System.out.println("Account Not Found!");
         }
     }
 
-    public void checkBalance(int checkAcc) {
-        boolean found = false;
-        for (Account account : accounts) {
-            if (account.getAccountNo() == checkAcc) {
-                System.out.println("Balance: " + account.getBalance());
-                found = true;
-                break;
-            }
+    public void checkBalance(int accountNo) {
+        Account account = accountDAO.searchAccount(accountNo);
+
+        if (account == null) {
+            System.out.println("Account not found!");
+            return;
         }
-        if (!found) {
-            System.out.println("Account Not Found!");
-        }
+        System.out.println("Balance: ₹" + account.getBalance());
+
     }
 
     public void transferMoney(int senderAcc, int receiverAcc, double amount) {
+
+        Account sender = accountDAO.searchAccount(senderAcc);
+        Account receiver = accountDAO.searchAccount(receiverAcc);
+
+        if (sender == null) {
+            System.out.println("Sender account not found!");
+            return;
+        }
+        if (receiver == null) {
+            System.out.println("Receiver account not found!");
+            return;
+        }
+
         if (amount <= 0) {
             System.out.println("Transfer amount must be greater than 0!");
-            return;
-        }
-
-        Account sender = null;
-        Account receiver = null;
-
-        // Find sender and receiver
-        for (Account account : accounts) {
-
-            if (account.getAccountNo() == senderAcc) {
-                sender = account;
-            }
-
-            if (account.getAccountNo() == receiverAcc) {
-                receiver = account;
-            }
-        }
-
-        // Check both accounts exist
-        if (sender == null || receiver == null) {
-            System.out.println("One or both accounts not found!");
-            return;
-        }
-
-        // Check amount
-        if (amount <= 0) {
-            System.out.println("Invalid transfer amount!");
             return;
         }
 
@@ -188,21 +151,21 @@ public class Bank {
             System.out.println("Insufficient Balance!");
             return;
         }
-
         // Transfer
-        sender.setBalance(sender.getBalance() - amount);
-        receiver.setBalance(receiver.getBalance() + amount);
-        transactions.add(
-                new Transaction(
-                        "Transfer",
-                        amount,
-                        senderAcc,
-                        receiverAcc
-                )
-        );
-        saveAccounts();
-        saveTransaction();
-        System.out.println("Transfer Successful!");
+
+        double newSenderBal = sender.getBalance() - amount;
+        double newReceiverBal = receiver.getBalance() + amount;
+
+        boolean senderUpdated = accountDAO.updateBalance(senderAcc, newSenderBal);
+        boolean receiverUpdated = accountDAO.updateBalance(receiverAcc, newReceiverBal);
+
+        if (senderUpdated && receiverUpdated) {
+            Transaction transaction = new Transaction("Transfer", amount, senderAcc, receiverAcc);
+            transactionDAO.saveTransaction(transaction);
+            System.out.println("Transfer Successful!");
+        } else {
+            System.out.println("Transfer failed!");
+        }
     }
 
     public void saveAccounts() {
@@ -256,6 +219,7 @@ public class Bank {
     }
 
     public void viewTransactions() {
+        ArrayList<Transaction> transDAO = transactionDAO.getAllTransaction();
 
         if (transactions.isEmpty()) {
             System.out.println("No transaction found!");
@@ -263,9 +227,9 @@ public class Bank {
 
         }
 
-        System.out.println("===Transactio History===");
+        System.out.println("===Transaction History===");
 
-        for (Transaction transaction : transactions) {
+        for (Transaction transaction : transDAO) {
             System.out.println(transaction);
         }
     }
