@@ -28,14 +28,13 @@ A console-based **Bank Management System** built with **Java, JDBC, and MySQL**.
 | View All Accounts | List every account stored in the database |
 | Search Account | Look up a specific account by account number |
 | Deposit Money | Add funds to an existing account |
-| Withdraw Money | Remove funds, with balance validation |
-| Transfer Money | Move funds between two accounts safely |
+| Withdraw Money | Remove funds from an account with balance validation |
+| Transfer Money | Move funds safely between two accounts |
 | Delete Account | Remove an account from the system |
 | Check Balance | View the current balance of an account |
-| Transaction History | View a full log of past transactions |
-| Input Validation | Prevents invalid or malformed data entry |
-| Transaction Handling | Commit/rollback ensures data consistency |
-
+| Transaction History | View the history of past transactions |
+| Input Validation | Prevent invalid or malformed data entry |
+| Transaction Handling | Commit and rollback help maintain data consistency |
 ---
 
 ## 🛠 Technologies Used
