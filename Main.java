@@ -8,11 +8,9 @@ public class Main {
 
         Scanner sc = new Scanner(System.in);
         Bank bank = new Bank();
-        bank.loadAccounts();
-        bank.loadTransaction();
 
         while (true) {
-            System.out.println("===Bank  Managemet System===");
+            System.out.println("=== Bank Management System ===");
             System.out.println("1. Create Account");
             System.out.println("2. View Account");
             System.out.println("3. Search Account");
@@ -44,17 +42,21 @@ public class Main {
 
                     try {
 
-                        System.out.print("Enter Accont Number: ");
+                        System.out.print("Enter Account Number: ");
                         accountNo = sc.nextInt();
                         sc.nextLine();
+                        if (accountNo < 0) {
+                            System.out.println("Account number must be positive!");
+                            break;
+                        }
 
-                        System.out.print("Enter Accont Holder Name: ");
+                        System.out.print("Enter Account Holder Name: ");
                         accountName = sc.nextLine();
                         if (accountName.trim().isEmpty()) {
                             System.out.println("Account holder name cannot be empty!");
                             break;
                         }
-                        System.out.print("Enter Accont Type: ");
+                        System.out.print("Enter Account Type: ");
                         accType = sc.nextLine();
                         if (accType.trim().isEmpty()) {
                             System.out.println("Account type cannot be empty!");
@@ -86,6 +88,7 @@ public class Main {
 
                     } catch (InputMismatchException e) {
                         System.out.println("Invalid input!");
+                        sc.nextLine();
                     }
 
                     break;
@@ -101,6 +104,7 @@ public class Main {
 
                     } catch (InputMismatchException e) {
                         System.out.println("Please enter a valid account number and deposit amount.");
+                        sc.nextLine();
                     }
 
                     break;
@@ -116,7 +120,7 @@ public class Main {
 
                     } catch (InputMismatchException e) {
                         System.out.println("Please enter a valid account number and withdrawal amount.");
-
+                        sc.nextLine();
                     }
                     break;
                 case 6:
@@ -128,7 +132,7 @@ public class Main {
 
                     } catch (InputMismatchException e) {
                         System.out.println("Invalid input!");
-
+                        sc.nextLine();
                     }
 
                     break;
@@ -141,7 +145,7 @@ public class Main {
 
                     } catch (InputMismatchException e) {
                         System.out.println("Invalid input!");
-
+                        sc.nextLine();
                     }
                     break;
 
@@ -160,7 +164,7 @@ public class Main {
 
                     } catch (InputMismatchException e) {
                         System.out.println("Enter valid input!");
-
+                        sc.nextLine();
                     }
                     break;
                 case 9:

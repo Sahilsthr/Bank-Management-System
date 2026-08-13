@@ -22,7 +22,7 @@ public class Transaction {
 
     }
 
-    //constructor for load transaction
+    // constructor for loading transaction from database
     public Transaction(String type, double amount, int senderAccount, int receiverAccount, String dateTime) {
         this.type = type;
         this.amount = amount;

@@ -24,6 +24,7 @@ public class TransactionDAO {
             }
 
         } catch (Exception e) {
+            System.out.println("Error while saving transaction!");
             e.printStackTrace();
         }
     }
@@ -35,12 +36,12 @@ public class TransactionDAO {
 
         try (Connection con = DatabaseConnection.getConnection(); PreparedStatement ps = con.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
-                int id = rs.getInt(1);
-                String type = rs.getString(2);
-                Double amount = rs.getDouble(3);
-                int sender_account = rs.getInt(4);
-                int receiver_account = rs.getInt(5);
-                String date_time = rs.getString(6);
+
+                String type = rs.getString("type");
+                double amount = rs.getDouble("amount");
+                int sender_account = rs.getInt("sender_account");
+                int receiver_account = rs.getInt("receiver_account");
+                String date_time = rs.getString("date_time");
 
                 Transaction t = new Transaction(type, amount, sender_account, receiver_account, date_time);
                 transaction.add(t);

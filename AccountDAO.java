@@ -3,6 +3,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 
 public class AccountDAO {
@@ -23,6 +24,8 @@ public class AccountDAO {
             if (rows > 0) {
                 System.out.println("Account saved to database");
             }
+        } catch (SQLIntegrityConstraintViolationException e) {
+            System.out.println("Account number already exists!");
 
         } catch (SQLException e) {
             System.out.println("Error while creating account!");
@@ -130,10 +133,11 @@ public class AccountDAO {
             con = DatabaseConnection.getConnection();
             con.setAutoCommit(false);
 
-            //get sender balance\
-            String selectSQL = "SELECT balance FROM WHERE account_no = ?";
+            //get sender balance
+            String selectSQL = "SELECT balance FROM accounts WHERE account_no = ?";
 
             PreparedStatement senderPS = con.prepareStatement(selectSQL);
+            senderPS.setInt(1, senderAcc);
 
             ResultSet senderRS = senderPS.executeQuery();
 
@@ -147,6 +151,7 @@ public class AccountDAO {
 
             //get receiver balance 
             PreparedStatement receiverPS = con.prepareStatement(selectSQL);
+            receiverPS.setInt(1, receiverAcc);
             ResultSet receiverRS = receiverPS.executeQuery();
 
             if (!receiverRS.next()) {
@@ -156,9 +161,9 @@ public class AccountDAO {
 
             }
 
-            double receiverBalance = senderRS.getDouble("balance");
+            double receiverBalance = receiverRS.getDouble("balance");
 
-            if (amount < 0) {
+            if (amount <= 0) {
                 System.out.println("Transfer amount must  be greater than zero!");
                 con.rollback();
                 return false;
