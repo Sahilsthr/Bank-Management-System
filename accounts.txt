@@ -1,6 +1,0 @@
-101,sahil suthar,saving,2001070.0
-102,mithun,current,30430.0
-103,adarsh,savings,50000.0
-105,gjhf,ljgkj,60000.0
-106,sahil suthar,current,43877.0
-109,sahil suthar,savings,88200.0
